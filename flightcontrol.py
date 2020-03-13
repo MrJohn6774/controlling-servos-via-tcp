@@ -1,6 +1,5 @@
 import RPi.GPIO as gpio
 import time
-import Servo
 
 
 aileron_left = 11
@@ -19,12 +18,21 @@ def initialize():
 def test():
     initialize()
     global aileron_left
-    al = Servo(aileron_left)
-    al.pwm.start(7.5)
+    pwm = gpio.PWM(aileron_left, 50)
+    pwm.start(7)
+    print("Left Aileron Neutral")
+    time.sleep(0.5)
+    pwm.ChangeDutyCycle(2.7)
     print("Left Aileron Down")
-    time.sleep(0.2)
-    al.pwm.ChangeDutyCycle(9.5)
+    time.sleep(1.5)
+    pwm.ChangeDutyCycle(11.3)
     print("Left Aileron Up")
+    time.sleep(1.5)
+    pwm.ChangeDutyCycle(7)
+    print("Left Aileron Neutral")
+    time.sleep(2)
+    gpio.cleanup()
+    print("cleanup")
 
 
 test()

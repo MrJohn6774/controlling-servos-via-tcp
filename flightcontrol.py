@@ -1,6 +1,6 @@
 import RPi.GPIO as gpio
 import time
-from Servo.py import Servo
+import Servo
 
 
 class main:
@@ -16,6 +16,7 @@ class main:
         gpio.setmode(gpio.BOARD)
         gpio.setup(chan_list, gpio.OUT)
 
+    @staticmethod
     def test():
         main.initialize()
         global aileron_left

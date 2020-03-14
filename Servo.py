@@ -22,6 +22,15 @@ class Servo:
         print(servo.name, " Neutral")
         time.sleep(0.5)
 
+    def move(servo, gp_pos):
+        x = gp_pos
+        dc = 7
+        if x < 120:
+            dc = 4.3/120.*x+2.7
+        elif x > 140:
+            dc = 4.3/115.*(x-140)+7
+        servo.pwm.ChangeDutyCycle(dc)
+
     @staticmethod
     def cleanup():
         gpio.cleanup()

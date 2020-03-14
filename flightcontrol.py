@@ -69,3 +69,9 @@ while 1:
         time.sleep(2)
     else:
         break
+
+while 1:
+    if event.code.strip() == "ABS_X":
+        gp_pos = float(event.state)
+        aileron_left.move(gp_pos)
+        aileron_right.move(255-gp_pos)

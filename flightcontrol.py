@@ -1,5 +1,5 @@
 import RPi.GPIO as gpio
-import Servo
+from Servo import Servo
 
 
 aileron_left = 11
@@ -10,6 +10,7 @@ chan_list = [aileron_left, aileron_right, elevator, rudder]
 
 
 def initialize():
+    gpio.cleanup
     gpio.setmode(gpio.BOARD)
     gpio.setup(chan_list, gpio.OUT)
 

@@ -10,16 +10,16 @@ class Servo:
 
     def test(servo):
         servo.pwm.start(7)
-        print(servo.name, " Neutral")
+        print("Debug:", servo.name, "Position: Neutral")
         time.sleep(0.3)
         servo.pwm.ChangeDutyCycle(2.7)
-        print(servo.name, " Down")
+        print("Debug:", servo.name, "Position: Down")
         time.sleep(0.5)
         servo.pwm.ChangeDutyCycle(11.3)
-        print(servo.name, " Up")
+        print("Debug:", servo.name, "Position: Up")
         time.sleep(0.8)
         servo.pwm.ChangeDutyCycle(7)
-        print(servo.name, " Neutral")
+        print("Debug:", servo.name, "Position: Neutral")
         time.sleep(0.5)
 
     def move(servo, gp_pos):

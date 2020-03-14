@@ -25,10 +25,10 @@ rudder = Servo(chan_list[3], "Yaw")
 
 
 def test():
-    aileron_left.test(chan_list[0])
-    aileron_right.test(chan_list[1])
-    elevator.test(chan_list[2])
-    rudder.test(chan_list[3])
+    aileron_left.test()
+    aileron_right.test()
+    elevator.test()
+    rudder.test()
     Servo.cleanup()                       # temporary for testing
     print("clean up")
 

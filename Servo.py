@@ -5,9 +5,10 @@ import time
 class Servo:
     def __init__(servo, pin, name):
         servo.pwm = gpio.PWM(pin, 50)
+        servo.pin = pin
         servo.name = name
 
-    def test(servo, pin):
+    def test(servo):
         servo.pwm.start(7)
         print(servo.name, " Neutral")
         time.sleep(0.3)

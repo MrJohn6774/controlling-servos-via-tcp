@@ -9,17 +9,17 @@ class Servo:
 
     def test(servo, pin):
         servo.pwm.start(7)
-        print("Pin ", servo.name, " Neutral")
-        time.sleep(0.5)
+        print(servo.name, " Neutral")
+        time.sleep(0.3)
         servo.pwm.ChangeDutyCycle(2.7)
-        print("Left ", servo.name, " Down")
-        time.sleep(1.5)
+        print(servo.name, " Down")
+        time.sleep(0.5)
         servo.pwm.ChangeDutyCycle(11.3)
-        print("Left ", servo.name, " Up")
-        time.sleep(1.5)
+        print(servo.name, " Up")
+        time.sleep(0.8)
         servo.pwm.ChangeDutyCycle(7)
-        print("Left ", servo.name, " Neutral")
-        time.sleep(2)
+        print(servo.name, " Neutral")
+        time.sleep(0.5)
 
     @staticmethod
     def cleanup():

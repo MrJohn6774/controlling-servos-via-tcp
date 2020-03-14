@@ -19,7 +19,7 @@ def test():
     aileron_right.test(chan_list[1])
     elevator.test(chan_list[2])
     rudder.test(chan_list[3])
-    Servo.cleanup()
+    Servo.cleanup()                       # temporary for testing
     print("clean up")
 
 

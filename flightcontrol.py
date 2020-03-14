@@ -1,5 +1,5 @@
-from Servo import Servo
 import inputs
+from Servo import Servo
 
 
 aileron_left = 11

@@ -1,6 +1,11 @@
 # import inputs
 import time
 import timeout_decorator
+""" def timeout(seconds=None,
+                use_signals=True,
+                timeout_exception=TimeoutError,
+                exception_message=None)
+"""
 from Servo import Servo
 
 
@@ -9,6 +14,7 @@ aileron_right = 12
 elevator = 15
 rudder = 16
 chan_list = [aileron_left, aileron_right, elevator, rudder]
+event = None
 
 Servo.initialize(chan_list)
 aileron_left = Servo(chan_list[0], "Left Aileron")
@@ -25,13 +31,15 @@ def test():
     Servo.cleanup()                       # temporary for testing
     print("clean up")
 
+
 @timeout_decorator.timeout(5)
-def gamepad():
-    while 1:  # Initial Device Connection Check
+def gamepad_conn():
+    while 1:                              # Initial Device Connection Check
         print("Debug: Prepare to import inputs")
         import inputs
         print("Debug: Inputs imported")
         try:
+            global event
             event = inputs.get_gamepad()
         except(inputs.UnpluggedError):
             print("Warning: No device is found")
@@ -52,7 +60,7 @@ def gamepad():
 
 while 1:
     try:
-        gamepad()
+        gamepad_conn()
     except(timeout_decorator.TimeoutError):
         print("Warning: No data is received")
         print("Check device is turned on and connected")

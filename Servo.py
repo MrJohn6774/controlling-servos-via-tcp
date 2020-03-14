@@ -3,21 +3,30 @@ import time
 
 
 class Servo:
-    def __init__(servo, servopin):
-        servo.pwm = gpio.PWM(servopin, 50)
+    def __init__(servo, pin, name):
+        servo.pwm = gpio.PWM(pin, 50)
+        servo.name = name
 
-    def test(servo, servopin):
+    def test(servo, pin):
         servo.pwm.start(7)
-        print("Pin ", servopin, " Neutral")
+        print("Pin ", servo.name, " Neutral")
         time.sleep(0.5)
         servo.pwm.ChangeDutyCycle(2.7)
-        print("Left ", servopin, " Down")
+        print("Left ", servo.name, " Down")
         time.sleep(1.5)
         servo.pwm.ChangeDutyCycle(11.3)
-        print("Left ", servopin, " Up")
+        print("Left ", servo.name, " Up")
         time.sleep(1.5)
         servo.pwm.ChangeDutyCycle(7)
-        print("Left ", servopin, " Neutral")
+        print("Left ", servo.name, " Neutral")
         time.sleep(2)
+
+    @staticmethod
+    def cleanup():
         gpio.cleanup()
-        print("cleanup")
+
+    @staticmethod
+    def initialize(chan_list):
+        gpio.cleanup
+        gpio.setmode(gpio.BOARD)
+        gpio.setup(chan_list, gpio.OUT)

@@ -7,18 +7,23 @@ import timeout_decorator
                 timeout_exception=TimeoutError,
                 exception_message=None)
 """
+
+
 pygame.init()
 pygame.joystick.init()
 
 
 class Gamepad:
+    AILERON = 0
+    ELEVATOR = 1
+    YAW = 3
 
     @staticmethod
     def quit():
-       pygame.quit()
-       sys.exit()
+        pygame.quit()
+        sys.exit()
 
-    def __init__ (self, id=0):
+    def __init__(self, id=0):
         self.conn()
         self.joystick = pygame.joystick.Joystick(id)
         self.joystick.init()
@@ -26,11 +31,12 @@ class Gamepad:
 
     def conn(self):
         while pygame.joystick.get_count() == 0:
-            s = int(time.time())
             print("Status: Waiting Device Connection")
             pygame.joystick.quit()
             time.sleep(0.2)
             pygame.joystick.init()
             time.sleep(1.8)
 
-    def getAileron():
+    def getAileron(self):
+        if self.joystick.get_axis(Gamepad.AILERON) < -0.06 or self.joystick.get_axis(Gamepad.AILERON) > 0.06:
+            return self.joystick.get_axis(Gamepad.AILERON)

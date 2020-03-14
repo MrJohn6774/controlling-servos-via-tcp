@@ -25,10 +25,10 @@ class Servo:
     def move(servo, gp_pos):
         x = gp_pos
         dc = 7
-        if x < 120:
-            dc = 4.3/120.*x+2.7
-        elif x > 140:
-            dc = 4.3/115.*(x-140)+7
+        if x < -0.06:
+            dc = 4.3/0.94*(x+1)+2.7
+        elif x > 0.06:
+            dc = 4.3/0.94*(x-0.06)+7
         servo.pwm.ChangeDutyCycle(dc)
 
     @staticmethod

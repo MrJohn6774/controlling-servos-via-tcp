@@ -25,14 +25,17 @@ def test():
 
 
 def aileron():
-    ps3 = Gamepad()
     while True:
-        ps3.getAileron()
+        gp_pos = ps3.getAileron()
+        aileron_left.move(gp_pos)
+        aileron_right.move(0-gp_pos)
+        time.sleep(0.1)
 
 
 test()
 
 try:
+    ps3 = Gamepad()
     aileron()
 except(KeyboardInterrupt):
     Servo.cleanup()

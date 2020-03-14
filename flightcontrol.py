@@ -1,4 +1,4 @@
-# import inputs
+import inputs
 import time
 import timeout_decorator
 """ def timeout(seconds=None,
@@ -6,6 +6,7 @@ import timeout_decorator
                 timeout_exception=TimeoutError,
                 exception_message=None)
 """
+from importlib import reload
 from Servo import Servo
 
 
@@ -33,29 +34,30 @@ def test():
 
 
 @timeout_decorator.timeout(5)
-def gamepad_conn():
-    while 1:                              # Initial Device Connection Check
-        print("Debug: Prepare to import inputs")
-        import inputs
-        print("Debug: Inputs imported")
+def gamepad_conn():                       # Initialize Device Connection
+    print("Debug: Prepare to import inputs")
+    import inputs
+    print("Debug: Inputs imported")
+    while 1:
         try:
             global event
             event = inputs.get_gamepad()
         except(inputs.UnpluggedError):
             print("Warning: No device is found")
             print("Status: Waiting Device Connection...")
-            del inputs
             time.sleep(3)
+            inputs = reload(inputs)
         except(IOError):
             print("Warning: Device connection lost")
             print("Status: Waiting Device Connection...")
-            del inputs
             time.sleep(3)
+            inputs = reload(inputs)
         else:
             break
     print("Status: Device connected")
-    Servo.cleanup()
-    return True
+
+
+test()
 
 
 while 1:
@@ -64,6 +66,6 @@ while 1:
     except(timeout_decorator.TimeoutError):
         print("Warning: No data is received")
         print("Check device is turned on and connected")
-        continue
+        time.sleep(2)
     else:
         break

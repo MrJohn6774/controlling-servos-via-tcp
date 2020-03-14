@@ -1,4 +1,5 @@
 from Servo import Servo
+import inputs
 
 
 aileron_left = 11
@@ -23,4 +24,17 @@ def test():
     print("clean up")
 
 
+def gamepad():
+    while 1:  # Initial Device Connection Check
+        try:
+            event = inputs.get_gamepad()
+        except(inputs.UnpluggedError):
+            print("Warning: No device is found")
+            print("wainting Device Connection...")
+        else:
+            break
+    print("Loop exited")
+
+
 test()
+gamepad()

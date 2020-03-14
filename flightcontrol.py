@@ -24,8 +24,16 @@ def test():
     rudder.test()
 
 
-test()
-Servo.cleanup() # temp
+def aileron():
+    ps3 = Gamepad()
+    while True:
+        ps3.getAileron()
 
-ps3 = Gamepad()
-Gamepad.quit()
+
+test()
+
+try:
+    aileron()
+except(KeyboardInterrupt):
+    Servo.cleanup()
+    Gamepad.quit()

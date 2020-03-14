@@ -7,7 +7,7 @@ import timeout_decorator
                 timeout_exception=TimeoutError,
                 exception_message=None)
 """
-
+pygame.init()
 pygame.joystick.init()
 
 
@@ -32,3 +32,5 @@ class Gamepad:
             time.sleep(0.2)
             pygame.joystick.init()
             time.sleep(1.8)
+
+    def getAileron():

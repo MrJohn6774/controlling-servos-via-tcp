@@ -17,6 +17,7 @@ class Gamepad:
     AILERON = 0
     ELEVATOR = 1
     YAW = 3
+    AXES = [AILERON, ELEVATOR, YAW, "Aileron", "Elevator", "Yaw"]
 
     @staticmethod
     def quit():
@@ -37,15 +38,13 @@ class Gamepad:
             pygame.joystick.init()
             time.sleep(1.8)
 
-    def getAileron(self):
+    def getPos(self, x):
         for event in pygame.event.get():
-            print("DEBUG: getAileron For Loop")
+            print("DEBUG: getPos For Loop")
             if event.type == pygame.JOYAXISMOTION:
-                print("DEBUG: Gamepad Aileron Channel:", Gamepad.AILERON)
-                print("DEBUG: Aileron input value:", self.js.get_axis(Gamepad.AILERON))
-                if self.js.get_axis(Gamepad.AILERON) < -0.06 or self.js.get_axis(Gamepad.AILERON) > 0.06:
-                    return self.js.get_axis(Gamepad.AILERON)
+                print("DEBUG: Gamepad", Gamepad.AXES[x+3], "Channel:", Gamepad.AXES[x])
+                print("DEBUG:", Gamepad.AXES[x+3], "input value:", self.js.get_axis(Gamepad.AXES[x]))
+                if self.js.get_axis(Gamepad.AXES[x]) < -0.06 or self.js.get_axis(Gamepad.AXES[x]) > 0.06:
+                    return self.js.get_axis(Gamepad.AXES[x])
                 else:
                     return 0
-            else:
-                return 0

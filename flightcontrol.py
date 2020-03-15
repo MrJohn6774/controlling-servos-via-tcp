@@ -24,9 +24,9 @@ def test():
     rudder.test()
 
 
-def aileron(gamepad):
+def aileron(js):
     while True:
-        gp_pos = gamepad.getAileron()
+        gp_pos = js.getPos(0)
         if not gp_pos:
             gp_pos = 0
         print("DEBUG: gp_pos value =", gp_pos)
@@ -34,11 +34,35 @@ def aileron(gamepad):
         aileron_right.move(0-gp_pos)
         time.sleep(0.09)
 
+
+def elevator(js):
+    while True:
+        gp_pos = js.getPos(1)
+        if not gp_pos:
+            gp_pos = 0
+        print("DEBUG: gp_pos value =", gp_pos)
+        elevator.move(gp_pos)
+        time.sleep(0.09)
+
+
+def yaw(js):
+    while True:
+        gp_pos = js.getPos(2)
+        if not gp_pos:
+            gp_pos = 0
+        print("DEBUG: gp_pos value =", gp_pos)
+        yaw.move(gp_pos)
+        time.sleep(0.09)
+
+
 test()
 
 try:
     ps3 = Gamepad()
     aileron(ps3)
+    elevator(ps3)
+    yaw(ps3)
+
 except(KeyboardInterrupt):
     Servo.cleanup()
     Gamepad.quit()

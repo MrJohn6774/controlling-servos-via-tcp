@@ -1,4 +1,5 @@
 import time
+import multiprocessing
 from Servo import Servo
 from Gamepad import Gamepad
 
@@ -59,9 +60,12 @@ test()
 
 try:
     ps3 = Gamepad()
-    roll(ps3)
-    pitch(ps3)
-    yaw(ps3)
+    r = multiprocessing.Process(target=roll, args=[ps3])
+    p = multiprocessing.Process(target=pitch, args=[ps3])
+    y = multiprocessing.Process(target=yaw, args=[ps3])
+    r.join()
+    p.join()
+    y.join()
 
 except(KeyboardInterrupt):
     Servo.cleanup()

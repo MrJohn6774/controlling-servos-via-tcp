@@ -19,10 +19,10 @@ rudder = Servo(chan_list[3], "Yaw")
 
 
 def test():
-    aileron_left.test()
-    aileron_right.test()
-    elevator.test()
-    rudder.test()
+    a_l = multiprocessing.Process(target=aileron_left.test)
+    a_r = multiprocessing.Process(target=aileron_right.test)
+    e = multiprocessing.Process(target=elevator.test)
+    r = multiprocessing.Process(target=rudder.test)
 
 
 def roll(js):

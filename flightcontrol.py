@@ -24,19 +24,22 @@ def test():
     rudder.test()
 
 
-def aileron():
+def aileron(gamepad):
     while True:
-        gp_pos = ps3.getAileron()
+        gp_pos = gamepad.getAileron()
+        if not gp_pos:
+            gp_pos = 0
+        print("DEBUG: gp_pos value =", gp_pos)
         aileron_left.move(gp_pos)
         aileron_right.move(0-gp_pos)
-        time.sleep(0.1)
-
+        time.sleep(0.09)
 
 test()
 
 try:
     ps3 = Gamepad()
-    aileron()
+    aileron(ps3)
 except(KeyboardInterrupt):
     Servo.cleanup()
     Gamepad.quit()
+    print("Stopped")

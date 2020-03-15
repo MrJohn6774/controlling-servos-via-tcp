@@ -7,9 +7,10 @@ class Servo:
         servo.pwm = gpio.PWM(pin, 50)
         servo.pin = pin
         servo.name = name
+        servo.pwm.start(7)
 
     def test(servo):
-        servo.pwm.start(7)
+        servo.pwm.ChangeDutyCycle(7)
         print("Debug:", servo.name, "Position: Neutral")
         time.sleep(0.3)
         servo.pwm.ChangeDutyCycle(2.7)

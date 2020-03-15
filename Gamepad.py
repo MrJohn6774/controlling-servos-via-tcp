@@ -38,7 +38,14 @@ class Gamepad:
             time.sleep(1.8)
 
     def getAileron(self):
-        if self.js.get_axis(Gamepad.AILERON) < -0.06 or self.js.get_axis(Gamepad.AILERON) > 0.06:
-            return self.js.get_axis(Gamepad.AILERON)
-        else:
-            return 0
+        for event in pygame.event.get():
+            print("DEBUG: getAileron For Loop")
+            if event.type == pygame.JOYAXISMOTION:
+                print("DEBUG: Gamepad Aileron Channel:", Gamepad.AILERON)
+                print("DEBUG: Aileron input value:", self.js.get_axis(Gamepad.AILERON))
+                if self.js.get_axis(Gamepad.AILERON) < -0.06 or self.js.get_axis(Gamepad.AILERON) > 0.06:
+                    return self.js.get_axis(Gamepad.AILERON)
+                else:
+                    return 0
+            else:
+                return 0

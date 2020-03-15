@@ -23,6 +23,11 @@ def test():
     a_r = multiprocessing.Process(target=aileron_right.test)
     e = multiprocessing.Process(target=elevator.test)
     r = multiprocessing.Process(target=rudder.test)
+    a_l.start()
+    a_r.start()
+    e.start()
+    r.start()
+    a_l.join()
 
 
 def roll(js):
@@ -63,9 +68,10 @@ try:
     r = multiprocessing.Process(target=roll, args=[ps3])
     p = multiprocessing.Process(target=pitch, args=[ps3])
     y = multiprocessing.Process(target=yaw, args=[ps3])
+    r.start()
+    p.start()
+    y.start()
     r.join()
-    p.join()
-    y.join()
 
 except(KeyboardInterrupt):
     Servo.cleanup()

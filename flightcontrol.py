@@ -24,7 +24,7 @@ def test():
     rudder.test()
 
 
-def aileron(js):
+def roll(js):
     while True:
         gp_pos = js.getPos(0)
         if not gp_pos:
@@ -35,7 +35,7 @@ def aileron(js):
         time.sleep(0.09)
 
 
-def elevator(js):
+def pitch(js):
     while True:
         gp_pos = js.getPos(1)
         if not gp_pos:
@@ -59,8 +59,8 @@ test()
 
 try:
     ps3 = Gamepad()
-    aileron(ps3)
-    elevator(ps3)
+    roll(ps3)
+    pitch(ps3)
     yaw(ps3)
 
 except(KeyboardInterrupt):

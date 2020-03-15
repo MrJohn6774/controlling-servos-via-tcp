@@ -39,12 +39,10 @@ class Gamepad:
             time.sleep(1.8)
 
     def getPos(self, x):
-        for event in pygame.event.get():
-            print("DEBUG: getPos For Loop")
-            if event.type == pygame.JOYAXISMOTION:
-                print("DEBUG: Gamepad", Gamepad.AXES[x+3], "Channel:", Gamepad.AXES[x])
-                print("DEBUG:", Gamepad.AXES[x+3], "input value:", self.js.get_axis(Gamepad.AXES[x]))
-                if self.js.get_axis(Gamepad.AXES[x]) < -0.06 or self.js.get_axis(Gamepad.AXES[x]) > 0.06:
-                    return self.js.get_axis(Gamepad.AXES[x])
-                else:
-                    return 0
+        pygame.event.pump()
+        print("DEBUG: Gamepad", Gamepad.AXES[x+3], "Channel:", Gamepad.AXES[x])
+        print("DEBUG:", Gamepad.AXES[x+3], "input value:", self.js.get_axis(Gamepad.AXES[x]))
+        if self.js.get_axis(Gamepad.AXES[x]) < -0.06 or self.js.get_axis(Gamepad.AXES[x]) > 0.06:
+            return self.js.get_axis(Gamepad.AXES[x])
+        else:
+            return 0

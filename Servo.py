@@ -2,15 +2,15 @@ import RPi.GPIO as gpio
 import time
 
 
-class Servo:
+class Servo():
+
     def __init__(servo, pin, name):
         servo.pwm = gpio.PWM(pin, 50)
         servo.pin = pin
         servo.name = name
-        servo.pwm.start(7)
+        servo.start = servo.pwm.start(7)
 
     def test(servo):
-        servo.pwm.ChangeDutyCycle(7)
         print("Debug:", servo.name, "Position: Neutral")
         time.sleep(0.3)
         servo.pwm.ChangeDutyCycle(2.7)
@@ -38,6 +38,5 @@ class Servo:
 
     @staticmethod
     def initialize(chan_list):
-        gpio.cleanup
         gpio.setmode(gpio.BOARD)
         gpio.setup(chan_list, gpio.OUT)

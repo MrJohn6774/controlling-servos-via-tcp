@@ -3,6 +3,7 @@ import time
 
 
 class Servo:
+
     def __init__(servo, pin, name):
         servo.pwm = gpio.PWM(pin, 50)
         servo.pin = pin
@@ -38,6 +39,5 @@ class Servo:
 
     @staticmethod
     def initialize(chan_list):
-        gpio.cleanup
         gpio.setmode(gpio.BOARD)
         gpio.setup(chan_list, gpio.OUT)

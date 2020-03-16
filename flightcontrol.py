@@ -29,10 +29,10 @@ def thread(func, a=[], daemon=False):
 
 
 def test():
+    ts = []
     for servo in servos:
-        ts = thread(servo.test)
-    for t in ts:
-        t.join()
+        ts.append(thread(servo.test))
+    return ts
 
 
 def roll(js):
@@ -68,13 +68,16 @@ def yaw(js):
         time.sleep(0.07)
 
 
-test()
+tests = test()
+for t in tests:
+    t.join()
 
 try:
     ps3 = Gamepad()
     axes = [roll, pitch, yaw]
+    a = []
     for axis in axes:
-        a = thread(axis, [ps3], daemon=True)
+        a.append(thread(axis, a=[ps3], daemon=True))
     for x in a:
         x.join()
 

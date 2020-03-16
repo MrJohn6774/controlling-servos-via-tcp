@@ -39,5 +39,6 @@ class Servo:
 
     @staticmethod
     def initialize(chan_list):
+        gpio.cleanup()
         gpio.setmode(gpio.BOARD)
         gpio.setup(chan_list, gpio.OUT)

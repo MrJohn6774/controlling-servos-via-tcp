@@ -1,7 +1,9 @@
 import pygame
 import time
+import logging
 
 
+logging.basicConfig(level=logging.INFO)
 pygame.init()
 pygame.joystick.init()
 
@@ -20,11 +22,11 @@ class Gamepad:
         self.conn()
         self.js = pygame.joystick.Joystick(id)
         self.js.init()
-        print("Debug: Device Connected. Id =", id)
+        logging.info("Device Connected. Id =", id)
 
     def conn(self):
         while pygame.joystick.get_count() == 0:
-            print("Status: Waiting Device Connection")
+            logging.info("Waiting Device Connection")
             pygame.joystick.quit()
             time.sleep(0.2)
             pygame.joystick.init()
@@ -32,8 +34,8 @@ class Gamepad:
 
     def getPos(self, x):
         pygame.event.pump()
-        print("DEBUG: Gamepad", Gamepad.AXES[x+3], "Channel:", Gamepad.AXES[x])
-        print("DEBUG:", Gamepad.AXES[x+3], "input value:", self.js.get_axis(Gamepad.AXES[x]))
+        logging.debug("Gamepad", Gamepad.AXES[x+3], "Channel:", Gamepad.AXES[x])
+        logging.debug("Gamepad", Gamepad.AXES[x+3], "Value:", self.js.get_axis(Gamepad.AXES[x]))
         if self.js.get_axis(Gamepad.AXES[x]) < -0.06 or self.js.get_axis(Gamepad.AXES[x]) > 0.06:
             return self.js.get_axis(Gamepad.AXES[x])
         else:

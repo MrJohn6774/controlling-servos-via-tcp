@@ -1,5 +1,6 @@
 import RPi.GPIO as gpio
 import time
+import logging
 
 
 class Servo:
@@ -12,16 +13,16 @@ class Servo:
 
     def test(servo):
         servo.pwm.ChangeDutyCycle(7)
-        print("Debug:", servo.name, "Position: Neutral")
+        logging.info(servo.name, "Position: Neutral")
         time.sleep(0.3)
         servo.pwm.ChangeDutyCycle(2.7)
-        print("Debug:", servo.name, "Position: Down")
+        logging.info(servo.name, "Position: Down")
         time.sleep(0.5)
         servo.pwm.ChangeDutyCycle(11.3)
-        print("Debug:", servo.name, "Position: Up")
+        logging.info(servo.name, "Position: Up")
         time.sleep(0.8)
         servo.pwm.ChangeDutyCycle(7)
-        print("Debug:", servo.name, "Position: Neutral")
+        logging.info(servo.name, "Position: Neutral")
         time.sleep(0.5)
 
     def move(servo, gp_pos):
@@ -38,7 +39,8 @@ class Servo:
         gpio.cleanup()
 
     @staticmethod
-    def initialize(chan_list):
+    def initialize(chan_list, debug=logging.INFO):
+        logging.basicConfig(level=debug)
         gpio.cleanup()
         gpio.setmode(gpio.BOARD)
         gpio.setup(chan_list, gpio.OUT)

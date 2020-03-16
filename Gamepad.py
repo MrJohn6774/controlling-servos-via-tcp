@@ -1,12 +1,5 @@
 import pygame
 import time
-import sys
-# import timeout_decorator
-""" def timeout(seconds=None,
-                use_signals=True,
-                timeout_exception=TimeoutError,
-                exception_message=None)
-"""
 
 
 pygame.init()
@@ -22,7 +15,6 @@ class Gamepad:
     @staticmethod
     def quit():
         pygame.quit()
-        sys.exit()
 
     def __init__(self, id=0):
         self.conn()

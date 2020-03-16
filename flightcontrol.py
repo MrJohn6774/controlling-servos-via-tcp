@@ -45,7 +45,7 @@ def roll(js):
         gp_pos = js.getPos(0)
         if not gp_pos:
             gp_pos = 0
-        logging.debug("gp_pos value =", gp_pos)
+        logging.debug("gp_pos value = %s" % gp_pos)
         aileron_left.move(gp_pos)
         aileron_right.move(0-gp_pos)
         time.sleep(0.1)
@@ -58,7 +58,7 @@ def pitch(js):
         if not gp_pos:
             logging.debug("gp_pos == None")
             gp_pos = 0
-        logging.debug("gp_pos value =", gp_pos)
+        logging.debug("gp_pos value = %s" % gp_pos)
         elevator.move(gp_pos)
         time.sleep(0.085)
 
@@ -69,7 +69,7 @@ def yaw(js):
         gp_pos = js.getPos(2)
         if not gp_pos:
             gp_pos = 0
-        logging.debug("gp_pos value =", gp_pos)
+        logging.debug("gp_pos value = %s" % gp_pos)
         rudder.move(gp_pos)
         time.sleep(0.07)
 

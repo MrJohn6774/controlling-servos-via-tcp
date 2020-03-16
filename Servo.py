@@ -13,16 +13,16 @@ class Servo:
 
     def test(servo):
         servo.pwm.ChangeDutyCycle(7)
-        logging.info(servo.name, "Position: Neutral")
+        logging.info(f"{servo.name} Position: Neutral")
         time.sleep(0.3)
         servo.pwm.ChangeDutyCycle(2.7)
-        logging.info(servo.name, "Position: Down")
+        logging.info(f"{servo.name} Position: Down")
         time.sleep(0.5)
         servo.pwm.ChangeDutyCycle(11.3)
-        logging.info(servo.name, "Position: Up")
+        logging.info(f"{servo.name} Position: Up")
         time.sleep(0.8)
         servo.pwm.ChangeDutyCycle(7)
-        logging.info(servo.name, "Position: Neutral")
+        logging.info(f"{servo.name} Position: Neutral")
         time.sleep(0.5)
 
     def move(servo, gp_pos):

@@ -6,7 +6,7 @@ from Servo import Servo
 from Gamepad import Gamepad
 
 DEBUG = True
-MODE = 2                # must be set to 1/2/3
+MODE = 1                # must be set to 1/2/3
 aileron_left = 11
 aileron_right = 12
 elevator = 15
@@ -79,11 +79,11 @@ def yaw(js):
 def main(m):
     m1, m2, a = ([] for i in range(3))
     if m == 1:
-        ps3 = Gamepad(mode=m1)
+        ps3 = Gamepad(Gamepad.m1)
     elif m == 2:
-        ps3 = Gamepad(mode=m2)
+        ps3 = Gamepad(Gamepad.m2)
     else:
-        ps3 = Gamepad()
+        ps3 = Gamepad(Gamepad.m3)
     axes = [roll, pitch, yaw]
     for axis in axes:
         a.append(thread(axis, a=[ps3], daemon=True))

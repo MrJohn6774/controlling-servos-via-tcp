@@ -4,7 +4,6 @@ import logging
 from collections import deque
 
 
-logging.basicConfig(level=logging.INFO)
 pygame.init()
 pygame.joystick.init()
 
@@ -13,7 +12,6 @@ class Gamepad:
     AILERON = 0
     ELEVATOR = 1
     YAW = 3
-    AXES = deque(["Aileron", "Elevator", "Yaw"])
     #        RX       LY     LX
     m1 = [AILERON, ELEVATOR, YAW]  # mode 1
     m3 = [YAW, ELEVATOR, AILERON]  # mode 3
@@ -24,14 +22,16 @@ class Gamepad:
         pygame.quit()
 
     @staticmethod
-    def log(debug):
+    def log(debug=logging.INFO):
         logging.basicConfig(level=debug)
 
-    def __init__(self, id=0, mode=m3):
+    def __init__(self, mode, id=0):
+        self.axes = deque(["Aileron", "Elevator", "Yaw"])
         self.conn()
         self.js = pygame.joystick.Joystick(id)
         self.js.init()
-        Gamepad.AXES.deque.extendleft(Gamepad.mode)
+        self.axes.extendleft(mode)
+        logging.debug(self.axes)
         logging.info("Device Connected. Id = %s" % id)
 
     def conn(self):
@@ -44,9 +44,9 @@ class Gamepad:
 
     def getPos(self, x):
         pygame.event.pump()
-        logging.debug(f"Gamepad {Gamepad.AXES[x+3]} Channel: {Gamepad.AXES[x]}")
-        logging.debug(f"Gamepad {Gamepad.AXES[x+3]} Value: {self.js.get_axis(Gamepad.AXES[x])}")
-        if self.js.get_axis(Gamepad.AXES[x]) < -0.06 or self.js.get_axis(Gamepad.AXES[x]) > 0.06:
-            return self.js.get_axis(Gamepad.AXES[x])
+        logging.debug(f"Gamepad {self.axes[x+3]} Channel: {self.axes[x]}")
+        logging.debug(f"Gamepad {self.axes[x+3]} Value: {self.js.get_axis(self.axes[x])}")
+        if self.js.get_axis(self.axes[x]) < -0.06 or self.js.get_axis(self.axes[x]) > 0.06:
+            return self.js.get_axis(self.axes[x])
         else:
             return 0

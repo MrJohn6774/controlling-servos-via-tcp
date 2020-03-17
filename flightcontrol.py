@@ -7,10 +7,10 @@ from Gamepad import Gamepad
 
 DEBUG = True
 MODE = 1                # must be set to 1/2/3
-aileron_left = 11
-aileron_right = 12
-elevator = 15
-rudder = 16
+aileron_left = 11       # GPIO pin
+aileron_right = 12      # GPIO pin
+elevator = 15           # GPIO pin
+rudder = 16             # GPIO pin
 chan_list = [aileron_left, aileron_right, elevator, rudder]
 
 if DEBUG:
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     try:
         main(MODE)
     except KeyboardInterrupt:
-        Servo.cleanup()
         Gamepad.quit()
+        Servo.cleanup()
         logging.info("Stopping...")
         sys.exit()

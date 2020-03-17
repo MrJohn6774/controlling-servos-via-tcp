@@ -1,6 +1,7 @@
 import pygame
 import time
 import logging
+from collections import deque
 
 
 logging.basicConfig(level=logging.INFO)
@@ -12,16 +13,25 @@ class Gamepad:
     AILERON = 0
     ELEVATOR = 1
     YAW = 3
-    AXES = [AILERON, ELEVATOR, YAW, "Aileron", "Elevator", "Yaw"]
+    AXES = deque(["Aileron", "Elevator", "Yaw"])
+    #        RX       LY     LX
+    m1 = [AILERON, ELEVATOR, YAW]  # mode 1
+    m3 = [YAW, ELEVATOR, AILERON]  # mode 3
+    m2 = [AILERON, 4, YAW]         # mode 2
 
     @staticmethod
     def quit():
         pygame.quit()
 
-    def __init__(self, id=0):
+    @staticmethod
+    def log(debug):
+        logging.basicConfig(level=debug)
+
+    def __init__(self, id=0, mode=m3):
         self.conn()
         self.js = pygame.joystick.Joystick(id)
         self.js.init()
+        Gamepad.AXES.deque.extendleft(Gamepad.mode)
         logging.info("Device Connected. Id = %s" % id)
 
     def conn(self):

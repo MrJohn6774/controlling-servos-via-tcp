@@ -6,6 +6,7 @@ from Servo import Servo
 from Gamepad import Gamepad
 
 DEBUG = True
+MODE = 2                # must be set to 1/2/3
 aileron_left = 11
 aileron_right = 12
 elevator = 15
@@ -14,6 +15,7 @@ chan_list = [aileron_left, aileron_right, elevator, rudder]
 
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
+    Gamepad.log(logging.DEBUG)
     Servo.initialize(chan_list, debug=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.INFO)
@@ -74,21 +76,30 @@ def yaw(js):
         time.sleep(0.07)
 
 
-tests = test()
-for t in tests:
-    t.join()
-
-try:
-    ps3 = Gamepad()
+def main(m):
+    m1, m2, a = ([] for i in range(3))
+    if m == 1:
+        ps3 = Gamepad(mode=m1)
+    elif m == 2:
+        ps3 = Gamepad(mode=m2)
+    else:
+        ps3 = Gamepad()
     axes = [roll, pitch, yaw]
-    a = []
     for axis in axes:
         a.append(thread(axis, a=[ps3], daemon=True))
     for x in a:
         x.join()
 
-except KeyboardInterrupt:
-    Servo.cleanup()
-    Gamepad.quit()
-    logging.info("Stopping...")
-    sys.exit()
+
+if __name__ == '__main__':
+    tests = test()
+    for t in tests:
+        t.join()
+
+    try:
+        main(MODE)
+    except KeyboardInterrupt:
+        Servo.cleanup()
+        Gamepad.quit()
+        logging.info("Stopping...")
+        sys.exit()

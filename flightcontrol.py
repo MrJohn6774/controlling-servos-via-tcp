@@ -6,7 +6,7 @@ from Servo import Servo
 from Gamepad import Gamepad
 
 DEBUG = True
-MODE = 1                # must be set to 1/2/3
+MODE = 3                # must be set to 1/2/3
 aileron_left = 11       # GPIO pin
 aileron_right = 12      # GPIO pin
 elevator = 15           # GPIO pin
@@ -20,11 +20,7 @@ if DEBUG:
 else:
     logging.basicConfig(level=logging.INFO)
     Servo.initialize(channels)
-# aileron_left = Servo(channels[0], "Left Aileron")
-# aileron_right = Servo(channels[1], "Right Aileron")
-# elevator = Servo(channels[2], "Elevator")
-# rudder = Servo(channels[3], "Yaw")
-# servos = [aileron_left, aileron_right, elevator, rudder]
+
 ser_names, servos = (["Left Aileron", "Right Aileron", "Elevator", "Yaw"], [])
 for channel, ser_name in zip(channels, ser_names):
     servos.append(Servo(channel, ser_name))         # servos = [aileron_left, aileron_right, elevator, rudder]

@@ -11,20 +11,23 @@ aileron_left = 11       # GPIO pin
 aileron_right = 12      # GPIO pin
 elevator = 15           # GPIO pin
 rudder = 16             # GPIO pin
-chan_list = [aileron_left, aileron_right, elevator, rudder]
+channels = [aileron_left, aileron_right, elevator, rudder]
 
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
     Gamepad.log(logging.DEBUG)
-    Servo.initialize(chan_list, debug=logging.DEBUG)
+    Servo.initialize(channels, debug=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.INFO)
-    Servo.initialize(chan_list)
-aileron_left = Servo(chan_list[0], "Left Aileron")
-aileron_right = Servo(chan_list[1], "Right Aileron")
-elevator = Servo(chan_list[2], "Elevator")
-rudder = Servo(chan_list[3], "Yaw")
-servos = [aileron_left, aileron_right, elevator, rudder]
+    Servo.initialize(channels)
+# aileron_left = Servo(channels[0], "Left Aileron")
+# aileron_right = Servo(channels[1], "Right Aileron")
+# elevator = Servo(channels[2], "Elevator")
+# rudder = Servo(channels[3], "Yaw")
+# servos = [aileron_left, aileron_right, elevator, rudder]
+ser_names, servos = (["Left Aileron", "Right Aileron", "Elevator", "Yaw"], [])
+for channel, ser_name in zip(channels, ser_names):
+    servos.append(Servo(channel, ser_name))         # servos = [aileron_left, aileron_right, elevator, rudder]
 
 
 def thread(func, a=[], daemon=False):
@@ -48,8 +51,8 @@ def roll(js):
         if not gp_pos:
             gp_pos = 0
         logging.debug("gp_pos value = %s" % gp_pos)
-        aileron_left.move(gp_pos)
-        aileron_right.move(0-gp_pos)
+        servos[0].move(gp_pos)
+        servos[1].move(0-gp_pos)
         time.sleep(0.1)
 
 
@@ -61,7 +64,7 @@ def pitch(js):
             logging.debug("gp_pos == None")
             gp_pos = 0
         logging.debug("gp_pos value = %s" % gp_pos)
-        elevator.move(gp_pos)
+        servos[2].move(gp_pos)
         time.sleep(0.085)
 
 
@@ -72,7 +75,7 @@ def yaw(js):
         if not gp_pos:
             gp_pos = 0
         logging.debug("gp_pos value = %s" % gp_pos)
-        rudder.move(gp_pos)
+        servos[3].move(gp_pos)
         time.sleep(0.07)
 
 

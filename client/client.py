@@ -19,49 +19,20 @@ def thread(func, a=[], daemon=False):
     return x
 
 
-def roll(js):
+def move(a, js):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))
-        s.sendall(b"0")
+        if a == 1:
+            s.send(int.to_bytes(0))
+        else:
+            s.send(int.to_bytes(a))
         while True:
-            gp_pos = js.getPos(0)
+            gp_pos = js.getPos(a-1)
             if not gp_pos:
                 gp_pos = 0
             logging.debug("gp_pos value = %s" % gp_pos)
-            time.sleep(0.1)
             s.sendall(str(gp_pos).encode('utf-8'))
-
-
-def pitch(js):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        s.send(b"2")
-        while True:
-            time.sleep(0.015)
-            gp_pos = js.getPos(1)
-            if not gp_pos:
-                logging.debug("gp_pos == None")
-                gp_pos = 0
-            logging.debug("gp_pos value = %s" % gp_pos)
-            time.sleep(0.085)
-            s.sendall(str(gp_pos).encode('utf-8'))
-
-
-def yaw(js):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        s.send(b"3")
-        while True:
-            try:
-                time.sleep(0.03)
-                gp_pos = js.getPos(2)
-                if not gp_pos:
-                    gp_pos = 0
-                logging.debug("gp_pos value = %s" % gp_pos)
-                time.sleep(0.07)
-                s.sendall(str(gp_pos).encode('utf-8'))
-            except KeyboardInterrupt:
-                break
+            time.sleep(0.08)
 
 
 def main():
@@ -72,9 +43,9 @@ def main():
         ps3 = Gamepad(Gamepad.m2)
     else:
         ps3 = Gamepad(Gamepad.m3)
-    axes = [roll, pitch, yaw]
+    axes = [1, 2, 3]
     for axis in axes:
-        a.append(thread(axis, a=[ps3], daemon=True))
+        a.append(thread(move, a=[axis, ps3], daemon=True))
     for x in a:
         x.join()
 

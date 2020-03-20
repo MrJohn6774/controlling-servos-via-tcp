@@ -25,11 +25,13 @@ class Gamepad:
     def log(debug=logging.INFO):
         logging.basicConfig(level=debug)
 
+    @staticmethod
+    def device_count():
+        return pygame.joystick.get_count()
+
     def __init__(self, mode, id=0):
         self.axes = deque(["Aileron", "Elevator", "Yaw"])
-        # self.conn()
-        if pygame.joystick.get_count() == 0:
-            return None
+        self.conn()
         self.js = pygame.joystick.Joystick(id)
         self.js.init()
         self.axes.extendleft(mode)

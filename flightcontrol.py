@@ -91,13 +91,7 @@ def handler(conn, addr):
 
 
 def main():
-    if MODE == 1:
-        ps3 = Gamepad(Gamepad.m1)
-    elif MODE == 2:
-        ps3 = Gamepad(Gamepad.m2)
-    else:
-        ps3 = Gamepad(Gamepad.m3)
-    if not ps3:
+    if Gamepad.device_count() == 0:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind(("", PORT))
         s.listen()
@@ -108,11 +102,18 @@ def main():
                 t.start()
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
-    axes, a = ([roll, pitch, yaw], [])
-    for axis in axes:
-        a.append(thread(axis, a=[ps3], daemon=True))
-    for x in a:
-        x.join()
+    else:
+        if MODE == 1:
+            ps3 = Gamepad(Gamepad.m1)
+        elif MODE == 2:
+            ps3 = Gamepad(Gamepad.m2)
+        else:
+            ps3 = Gamepad(Gamepad.m3)
+        axes, a = ([roll, pitch, yaw], [])
+        for axis in axes:
+            a.append(thread(axis, a=[ps3], daemon=True))
+        for x in a:
+            x.join()
 
 
 if __name__ == '__main__':

@@ -9,6 +9,7 @@ from Gamepad import Gamepad
 PORT = 1013
 HOST = "192.168.137.201"
 MODE = 3
+DEBUG = True
 
 
 def thread(func, a=[], daemon=False):
@@ -30,8 +31,11 @@ def move(a, js):
             gp_pos = js.getPos(a-1)
             if not gp_pos:
                 gp_pos = 0
+            gp_pos = str(gp_pos)
+            while(len(gp_pos) < 18):
+                gp_pos = gp_pos + "0"
             logging.debug("gp_pos value = %s" % gp_pos)
-            s.sendall(str(gp_pos).encode('utf-8'))
+            s.sendall(gp_pos.encode('utf-8'))
             time.sleep(0.08)
 
 
@@ -52,6 +56,10 @@ def main():
 
 if __name__ == "__main__":
     try:
+        if DEBUG:
+            logging.basicConfig(level=logging.DEBUG)
+        else:
+            logging.basicConfig(level=logging.INFO)
         main()
     finally:
         logging.info("Stopping")

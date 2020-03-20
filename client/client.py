@@ -23,9 +23,9 @@ def move(a, js):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))
         if a == 1:
-            s.send(int.to_bytes(0))
+            s.send(str(0).encode('utf-8'))
         else:
-            s.send(int.to_bytes(a))
+            s.send(str(a).encode('utf-8'))
         while True:
             gp_pos = js.getPos(a-1)
             if not gp_pos:

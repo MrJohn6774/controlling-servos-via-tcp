@@ -62,7 +62,7 @@ def handler(conn, addr):
         logging.info(f'Connection from {addr}')
         axis = int(conn.recv(1).decode())
         while 1:
-            data = conn.recv(1024).decode()
+            data = conn.recv(17).decode()
             if not data:
                 break
             servos[axis].move(float(data))        # move()

@@ -1,30 +1,31 @@
 import time
 import threading
+import socket
 import sys
 import logging
 from Servo import Servo
 from Gamepad import Gamepad
 
 DEBUG = True
-MODE = 1                # must be set to 1/2/3
+PORT = 1013
+MODE = 3                # must be set to 1/2/3
 aileron_left = 11       # GPIO pin
 aileron_right = 12      # GPIO pin
 elevator = 15           # GPIO pin
 rudder = 16             # GPIO pin
-chan_list = [aileron_left, aileron_right, elevator, rudder]
+channels = [aileron_left, aileron_right, elevator, rudder]
 
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
     Gamepad.log(logging.DEBUG)
-    Servo.initialize(chan_list, debug=logging.DEBUG)
+    Servo.initialize(channels, debug=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.INFO)
-    Servo.initialize(chan_list)
-aileron_left = Servo(chan_list[0], "Left Aileron")
-aileron_right = Servo(chan_list[1], "Right Aileron")
-elevator = Servo(chan_list[2], "Elevator")
-rudder = Servo(chan_list[3], "Yaw")
-servos = [aileron_left, aileron_right, elevator, rudder]
+    Servo.initialize(channels)
+
+ser_names, servos = (["Left Aileron", "Right Aileron", "Elevator", "Yaw"], [])
+for channel, ser_name in zip(channels, ser_names):
+    servos.append(Servo(channel, ser_name))         # servos = [aileron_left, aileron_right, elevator, rudder]
 
 
 def thread(func, a=[], daemon=False):
@@ -48,8 +49,8 @@ def roll(js):
         if not gp_pos:
             gp_pos = 0
         logging.debug("gp_pos value = %s" % gp_pos)
-        aileron_left.move(gp_pos)
-        aileron_right.move(0-gp_pos)
+        servos[0].move(gp_pos)
+        servos[1].move(0-gp_pos)
         time.sleep(0.1)
 
 
@@ -61,7 +62,7 @@ def pitch(js):
             logging.debug("gp_pos == None")
             gp_pos = 0
         logging.debug("gp_pos value = %s" % gp_pos)
-        elevator.move(gp_pos)
+        servos[2].move(gp_pos)
         time.sleep(0.085)
 
 
@@ -72,23 +73,47 @@ def yaw(js):
         if not gp_pos:
             gp_pos = 0
         logging.debug("gp_pos value = %s" % gp_pos)
-        rudder.move(gp_pos)
+        servos[3].move(gp_pos)
         time.sleep(0.07)
 
 
-def main(m):
-    m1, m2, a = ([] for i in range(3))
-    if m == 1:
-        ps3 = Gamepad(Gamepad.m1)
-    elif m == 2:
-        ps3 = Gamepad(Gamepad.m2)
+def handler(conn, addr):
+    with conn:
+        logging.info(f'Connection from {addr}')
+        axis = int(conn.recv(1).decode())
+        while 1:
+            data = conn.recv(1024).decode()
+            if not data:
+                break
+            servos[axis].move(float(data))        # move()
+            if axis == 0:
+                servos[axis+1].move(0-float(data))
+
+
+def main():
+    if Gamepad.device_count() == 0:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("", PORT))
+        s.listen()
+        while 1:
+            try:
+                conn, addr = s.accept()
+                t = threading.Thread(target=handler, args=[conn, addr], daemon=True)
+                t.start()
+            except KeyboardInterrupt:
+                raise KeyboardInterrupt
     else:
-        ps3 = Gamepad(Gamepad.m3)
-    axes = [roll, pitch, yaw]
-    for axis in axes:
-        a.append(thread(axis, a=[ps3], daemon=True))
-    for x in a:
-        x.join()
+        if MODE == 1:
+            ps3 = Gamepad(Gamepad.m1)
+        elif MODE == 2:
+            ps3 = Gamepad(Gamepad.m2)
+        else:
+            ps3 = Gamepad(Gamepad.m3)
+        axes, a = ([roll, pitch, yaw], [])
+        for axis in axes:
+            a.append(thread(axis, a=[ps3], daemon=True))
+        for x in a:
+            x.join()
 
 
 if __name__ == '__main__':
@@ -97,7 +122,7 @@ if __name__ == '__main__':
         t.join()
 
     try:
-        main(MODE)
+        main()
     except KeyboardInterrupt:
         Gamepad.quit()
         Servo.cleanup()

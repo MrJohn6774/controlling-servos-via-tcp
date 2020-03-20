@@ -1,8 +1,7 @@
 import pygame
-import time
 import logging
+import time
 from collections import deque
-
 
 pygame.init()
 pygame.joystick.init()
@@ -11,11 +10,11 @@ pygame.joystick.init()
 class Gamepad:
     AILERON = 0
     ELEVATOR = 1
-    YAW = 3
+    YAW = 4                        # Xbox
     #        RX       LY     LX
     m1 = [AILERON, ELEVATOR, YAW]  # mode 1
     m3 = [YAW, ELEVATOR, AILERON]  # mode 3
-    m2 = [AILERON, 4, YAW]         # mode 2
+    m2 = [AILERON, 3, YAW]         # mode 2 Xbox
 
     @staticmethod
     def quit():
@@ -27,9 +26,7 @@ class Gamepad:
 
     def __init__(self, mode, id=0):
         self.axes = deque(["Aileron", "Elevator", "Yaw"])
-        # self.conn()
-        if pygame.joystick.get_count() == 0:
-            return None
+        self.conn()
         self.js = pygame.joystick.Joystick(id)
         self.js.init()
         self.axes.extendleft(mode)

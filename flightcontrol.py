@@ -1,11 +1,13 @@
 import time
 import threading
+import socket
 import sys
 import logging
 from Servo import Servo
 from Gamepad import Gamepad
 
 DEBUG = True
+PORT = 1013
 MODE = 3                # must be set to 1/2/3
 aileron_left = 11       # GPIO pin
 aileron_right = 12      # GPIO pin
@@ -75,15 +77,38 @@ def yaw(js):
         time.sleep(0.07)
 
 
-def main(m):
-    m1, m2, a = ([] for i in range(3))
-    if m == 1:
+def handler(conn, addr):
+    with conn:
+        logging.info(f'Connection from {addr}')
+        axis = int(conn.recv(1).decode())
+        while 1:
+            data = conn.recv(1024).decode()
+            if not data:
+                break
+            servos[axis].move(float(data))        # move()
+            if axis == 0:
+                servos[axis+1].move(0-float(data))
+
+
+def main():
+    if MODE == 1:
         ps3 = Gamepad(Gamepad.m1)
-    elif m == 2:
+    elif MODE == 2:
         ps3 = Gamepad(Gamepad.m2)
     else:
         ps3 = Gamepad(Gamepad.m3)
-    axes = [roll, pitch, yaw]
+    if not ps3:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("", PORT))
+        s.listen()
+        while 1:
+            try:
+                conn, addr = s.accept()
+                t = threading.Thread(target=handler, args=[conn, addr], daemon=True)
+                t.start()
+            except KeyboardInterrupt:
+                raise KeyboardInterrupt
+    axes, a = ([roll, pitch, yaw], [])
     for axis in axes:
         a.append(thread(axis, a=[ps3], daemon=True))
     for x in a:
@@ -96,7 +121,7 @@ if __name__ == '__main__':
         t.join()
 
     try:
-        main(MODE)
+        main()
     except KeyboardInterrupt:
         Gamepad.quit()
         Servo.cleanup()

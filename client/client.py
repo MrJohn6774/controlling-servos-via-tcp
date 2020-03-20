@@ -52,13 +52,16 @@ def yaw(js):
         s.connect((HOST, PORT))
         s.send(b"3")
         while True:
-            time.sleep(0.03)
-            gp_pos = js.getPos(2)
-            if not gp_pos:
-                gp_pos = 0
-            logging.debug("gp_pos value = %s" % gp_pos)
-            time.sleep(0.07)
-            s.sendall(str(gp_pos).encode('utf-8'))
+            try:
+                time.sleep(0.03)
+                gp_pos = js.getPos(2)
+                if not gp_pos:
+                    gp_pos = 0
+                logging.debug("gp_pos value = %s" % gp_pos)
+                time.sleep(0.07)
+                s.sendall(str(gp_pos).encode('utf-8'))
+            except KeyboardInterrupt:
+                break
 
 
 def main():
@@ -79,6 +82,6 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except KeyboardInterrupt:
+    finally:
         logging.info("Stopping")
         sys.exit()

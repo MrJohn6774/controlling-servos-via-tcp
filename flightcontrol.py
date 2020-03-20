@@ -43,38 +43,18 @@ def test():
     return ts
 
 
-def roll(js):
+def move(a, js):
     while True:
-        gp_pos = js.getPos(0)
+        gp_pos = js.getPos(a-1)
         if not gp_pos:
             gp_pos = 0
         logging.debug("gp_pos value = %s" % gp_pos)
-        servos[0].move(gp_pos)
-        servos[1].move(0-gp_pos)
+        if a == 1:
+            servos[a].move(0-gp_pos)
+            servos[0].move(gp_pos)
+        else:
+            servos[a].move(gp_pos)
         time.sleep(0.1)
-
-
-def pitch(js):
-    while True:
-        time.sleep(0.015)
-        gp_pos = js.getPos(1)
-        if not gp_pos:
-            logging.debug("gp_pos == None")
-            gp_pos = 0
-        logging.debug("gp_pos value = %s" % gp_pos)
-        servos[2].move(gp_pos)
-        time.sleep(0.085)
-
-
-def yaw(js):
-    while True:
-        time.sleep(0.03)
-        gp_pos = js.getPos(2)
-        if not gp_pos:
-            gp_pos = 0
-        logging.debug("gp_pos value = %s" % gp_pos)
-        servos[3].move(gp_pos)
-        time.sleep(0.07)
 
 
 def handler(conn, addr):
@@ -109,9 +89,9 @@ def main():
             ps3 = Gamepad(Gamepad.m2)
         else:
             ps3 = Gamepad(Gamepad.m3)
-        axes, a = ([roll, pitch, yaw], [])
+        axes, a = ([1, 2, 3], [])
         for axis in axes:
-            a.append(thread(axis, a=[ps3], daemon=True))
+            a.append(thread(move, a=[axis, ps3], daemon=True))
         for x in a:
             x.join()
 

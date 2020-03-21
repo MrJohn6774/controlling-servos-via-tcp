@@ -79,7 +79,7 @@ def main():
 
 try:
     main()
-except(KeyboardInterrupt):
+except KeyboardInterrupt:
     pygame.quit()
     sys.exit()
     print("Stopped")

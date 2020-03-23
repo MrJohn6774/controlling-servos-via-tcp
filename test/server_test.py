@@ -13,7 +13,7 @@ def handler(conn, addr):
         print(f'Connection from {addr}')
         print('Servos list number', conn.recv(1).decode())
         while 1:
-            data = conn.recv(1024).decode()
+            data = conn.recv(18).decode()
             if not data:
                 break
             print(float(data))        # move()

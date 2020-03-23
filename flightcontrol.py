@@ -40,6 +40,7 @@ def test():
     ts = []
     for servo in servos:
         ts.append(thread(servo.test))
+    logging.info("Local servo control test completed.")
     return ts
 
 
